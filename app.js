@@ -40,8 +40,8 @@ app.post('/fetch', async (req, res) => {
         
         // Only process if it's a text node
         if (content && $(el).children().length === 0) {
-          // Replace Yale with Fale in text content only
-          content = content.replace(/Yale/g, 'fale').replace(/YALE/g, 'FALE');
+          // Replace Yale with Fale in text content only (case-preserving)
+          content = content.replace(/YALE/g, 'FALE').replace(/Yale/g, 'Fale').replace(/yale/g, 'fale');
           $(el).html(content);
         }
       }
@@ -51,16 +51,16 @@ app.post('/fetch', async (req, res) => {
     $('body *').contents().filter(function() {
       return this.nodeType === 3; // Text nodes only
     }).each(function() {
-      // Replace text content but not in URLs or attributes
+      // Replace text content but not in URLs or attributes (case-preserving)
       const text = $(this).text();
-      const newText = text.replace(/Yale/g, 'fale').replace(/YALE/g, 'FALE');
+      const newText = text.replace(/YALE/g, 'FALE').replace(/Yale/g, 'Fale').replace(/yale/g, 'fale');
       if (text !== newText) {
         $(this).replaceWith(newText);
       }
     });
     
     // Process title separately
-    const title = $('title').text().replace(/Yale/g, 'fale').replace(/yale/g, 'fale').replace(/YALE/g, 'FALE');
+    const title = $('title').text().replace(/YALE/g, 'FALE').replace(/Yale/g, 'Fale').replace(/yale/g, 'fale');
     $('title').text(title);
     
     return res.json({ 
@@ -77,7 +77,12 @@ app.post('/fetch', async (req, res) => {
   }
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Faleproxy server running at http://localhost:${PORT}`);
-});
+// Start the server only if not in test/production environment
+if (process.env.NODE_ENV !== 'production' && !module.parent) {
+  app.listen(PORT, () => {
+    console.log(`Faleproxy server running at http://localhost:${PORT}`);
+  });
+}
+
+// Export the app for Vercel serverless functions
+module.exports = app;
