@@ -118,3 +118,4 @@ For detailed HW9 setup instructions, see:
 - Cheerio - HTML parsing and manipulation
 - Vanilla JavaScript for frontend functionality
 - Jest, Supertest, and Nock for testing
+# CI/CD configured and ready
