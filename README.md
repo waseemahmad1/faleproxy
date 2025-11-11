@@ -63,22 +63,52 @@ npm run test:ci
 
 ## CI/CD Pipeline
 
-The repository includes a GitHub Actions workflow configuration in `.github/workflows/ci.yml` that:
+The repository includes a comprehensive GitHub Actions workflow configuration in `.github/workflows/ci.yml` that:
 
-1. Runs on pushes to main/master branches and on pull requests
-2. Tests the application on multiple Node.js versions (18.x, 20.x)
-3. Generates and uploads test coverage reports
-4. Automatically deploys to Vercel (when pushing to main/master)
+1. **Tests on every push**: Runs tests on pushes to main/master branches and on pull requests
+2. **Multi-version testing**: Tests the application on multiple Node.js versions (18.x, 20.x)
+3. **Coverage reports**: Generates and uploads test coverage reports
+4. **Preview deployments**: Automatically deploys feature branches to Vercel preview environment
+5. **Production deployments**: Automatically deploys to Vercel production ONLY when:
+   - Pushing to main/master branch
+   - **AND tests pass successfully**
 
-### Setting up Vercel Deployment
+### Setting up CI/CD (Required for HW9)
 
-To enable automatic deployments to Vercel, you need to:
+**Step 1: Enable GitHub Actions**
+- GitHub Actions are disabled by default on forks
+- Go to `https://github.com/USERNAME/faleproxy/actions`
+- Click "I understand my workflows, go ahead and enable them"
 
-1. Create a Vercel account and link your repository
-2. Create a Vercel project for your application
-3. Generate a Vercel token and add it as a secret in your GitHub repository:
-   - Go to Settings → Secrets → Actions
-   - Add a new secret named `VERCEL_TOKEN` with your Vercel token
+**Step 2: Set up Vercel Secrets**
+
+You need to add three secrets to your GitHub repository:
+
+1. **VERCEL_TOKEN**: 
+   - Go to https://vercel.com/account/tokens
+   - Create a new token
+   - Add it as a GitHub secret
+
+2. **VERCEL_ORG_ID**:
+   - Found in Vercel account settings
+   - Or run `vercel link` and check `.vercel/project.json`
+
+3. **VERCEL_PROJECT_ID**:
+   - Found in Vercel project settings
+   - Or run `vercel link` and check `.vercel/project.json`
+
+Add these secrets at: `https://github.com/USERNAME/faleproxy/settings/secrets/actions`
+
+**Step 3: Verify Workflow**
+- Push changes to a feature branch → Preview deployment
+- Merge to main → Production deployment (only if tests pass)
+- Tests fail → No production deployment ✅
+
+### HW9 Documentation
+
+For detailed HW9 setup instructions, see:
+- `HW9_SETUP_GUIDE.md` - Complete step-by-step setup guide
+- `HW9_SUBMISSION_TEMPLATE.md` - Submission template with all required information
 
 ## Technologies Used
 
