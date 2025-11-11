@@ -62,14 +62,21 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
       
+      - name: Check env before deploy
+        run: |
+          echo "ORG_ID length: ${#VERCEL_ORG_ID}"
+          echo "PROJECT_ID length: ${#VERCEL_PROJECT_ID}"
+          echo "ORG_ID starts with: ${VERCEL_ORG_ID:0:8}..."
+          echo "PROJECT_ID starts with: ${VERCEL_PROJECT_ID:0:8}..."
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      
       - name: Deploy to Vercel Preview
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--yes'
-          scope: ${{ secrets.VERCEL_ORG_ID }}
+        run: npx vercel --token=${{ secrets.VERCEL_TOKEN }} --yes
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
   
   deploy-production:
     name: Deploy Production
@@ -89,11 +96,18 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
       
+      - name: Check env before deploy
+        run: |
+          echo "ORG_ID length: ${#VERCEL_ORG_ID}"
+          echo "PROJECT_ID length: ${#VERCEL_PROJECT_ID}"
+          echo "ORG_ID starts with: ${VERCEL_ORG_ID:0:8}..."
+          echo "PROJECT_ID starts with: ${VERCEL_PROJECT_ID:0:8}..."
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      
       - name: Deploy to Vercel Production
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod --yes'
-          scope: ${{ secrets.VERCEL_ORG_ID }}
+        run: npx vercel --token=${{ secrets.VERCEL_TOKEN }} --yes --prod
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
