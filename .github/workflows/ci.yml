@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - master
+      - hw9-cicd-fixes
   pull_request:
     branches:
       - main
