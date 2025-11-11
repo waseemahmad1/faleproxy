@@ -31,16 +31,16 @@ testApp.post('/fetch', async (req, res) => {
     $('body *').contents().filter(function() {
       return this.nodeType === 3; // Text nodes only
     }).each(function() {
-      // Replace text content but not in URLs or attributes
+      // Replace text content but not in URLs or attributes (case-preserving)
       const text = $(this).text();
-      const newText = text.replace(/Yale/g, 'Fale').replace(/yale/g, 'fale');
+      const newText = text.replace(/YALE/g, 'FALE').replace(/Yale/g, 'Fale').replace(/yale/g, 'fale');
       if (text !== newText) {
         $(this).replaceWith(newText);
       }
     });
     
     // Process title separately
-    const title = $('title').text().replace(/Yale/g, 'Fale').replace(/yale/g, 'fale');
+    const title = $('title').text().replace(/YALE/g, 'FALE').replace(/Yale/g, 'Fale').replace(/yale/g, 'fale');
     $('title').text(title);
     
     return res.json({ 
